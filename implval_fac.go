@@ -7,11 +7,9 @@ func MakeBuiltinFactory() ValidationFactoryRegistry {
 	fac.MustPut("required", makeRequiredVF())
 	fac.MustPut("not_empty", makeNotEmptyVF())
 
-	// object/data structure stuff
-	// fac.MustPut("any_object", makeAnyObjectVF())
-	// fac.MustPut("not_empty_list", makeNotEmptyListVF())
-
-	// fac.MustPut("max_length", makeLengthValidator("max_length", maxIncLVK))
-	// fac.MustPut("min_length", makeLengthValidator("min_length", minIncLVK))
+	// string stuff
+	fac.MustPut("is_string", makeIsStringVF())
+	fac.MustPut("min_length", makeMinLengthVF())
+	fac.MustPut("max_length", makeMaxLengthVF())
 	return fac
 }

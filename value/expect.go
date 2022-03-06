@@ -39,3 +39,19 @@ func ExpectPrimitiveValue(val Value) (pv *PrimitiveValue, err error) {
 	}
 	return
 }
+
+func ExpectStringValue(val Value) (sv string, err error) {
+	pv, err := ExpectPrimitiveValue(val)
+	if err != nil {
+		return
+	}
+
+	up := pv.RawUnpointered()
+	sv, ok := up.(string)
+	if !ok {
+		err = ErrExpectFiled
+		return
+	}
+
+	return
+}
