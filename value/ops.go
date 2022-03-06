@@ -2,7 +2,7 @@ package value
 
 import "reflect"
 
-type ValueOPs interface {
+type OPs interface {
 	// Returns true if values are equal.
 	// Note: this equal is like JS equal, so in some cases is not symmetric, transistent and so on.
 	Eq(v1, v2 Value) (ok bool)
@@ -18,9 +18,9 @@ type ValueOPs interface {
 	IsEmpty(v Value) bool
 }
 
-type DefaultValueOPs struct{}
+type DefaultOPs struct{}
 
-func (dvo *DefaultValueOPs) Eq(v1, v2 Value) (ok bool) {
+func (dvo *DefaultOPs) Eq(v1, v2 Value) (ok bool) {
 	// if same then equal
 	if v1 == v2 {
 		return true
@@ -56,12 +56,12 @@ func (dvo *DefaultValueOPs) Eq(v1, v2 Value) (ok bool) {
 	return false
 }
 
-func (dvo *DefaultValueOPs) Stringify(v Value) (res string, err error) {
+func (dvo *DefaultOPs) Stringify(v Value) (res string, err error) {
 	res, err = stringifyValue(v)
 	return
 }
 
-func (dvo *DefaultValueOPs) Len(val Value) (sz int, err error) {
+func (dvo *DefaultOPs) Len(val Value) (sz int, err error) {
 	res, err := stringifyValue(val)
 	if err != nil {
 		return
@@ -70,7 +70,7 @@ func (dvo *DefaultValueOPs) Len(val Value) (sz int, err error) {
 	return
 }
 
-func (dvo *DefaultValueOPs) IsEmpty(v Value) bool {
+func (dvo *DefaultOPs) IsEmpty(v Value) bool {
 	// TODO(teawithsand): implement more cases here
 	r := v.Raw()
 	return r == ""
