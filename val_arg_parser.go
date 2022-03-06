@@ -3,12 +3,16 @@ package livr
 import (
 	"context"
 	"fmt"
+
+	"github.com/teawithsand/livr4go/value"
 )
 
 // Helper, which makes parsing incoming validation's argument simpler.
 type ArgumentParser interface {
 	// Parses length from argument given.
 	ParseLen(ctx context.Context, arg interface{}) (sz int, err error)
+	ParsePrimitiveValue(ctx context.Context, arg interface{}) (pv *value.PrimitiveValue, err error)
+	ParseListValue(ctx context.Context, arg interface{}) (lv value.ListValue, err error)
 
 	// TODO(teawithsand): implement that
 	// Prases argument incoming to specifeid struct pointer like json.Unmarshal
@@ -37,4 +41,34 @@ func (parser *DefaultArgumentParser) ParseLen(ctx context.Context, v interface{}
 		}
 		return
 	}
+}
+
+func (parser *DefaultArgumentParser) ParsePrimitiveValue(ctx context.Context, v interface{}) (pv *value.PrimitiveValue, err error) {
+	vv, err := value.Wrap(v)
+	if err != nil {
+		return
+	}
+
+	pv, ok := vv.(*value.PrimitiveValue)
+	if !ok {
+		err = &ValidationCreateError{
+			Msg: fmt.Sprintf("Value is not primitive: %T", v),
+		}
+	}
+	return
+}
+
+func (parser *DefaultArgumentParser) ParseListValue(ctx context.Context, v interface{}) (lv value.ListValue, err error) {
+	vv, err := value.Wrap(v)
+	if err != nil {
+		return
+	}
+
+	lv, ok := vv.(value.ListValue)
+	if !ok {
+		err = &ValidationCreateError{
+			Msg: fmt.Sprintf("Value is not list: %T", v),
+		}
+	}
+	return
 }
