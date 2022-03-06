@@ -6,15 +6,15 @@ import (
 	"github.com/teawithsand/livr4go/value"
 )
 
-type Validator interface {
+type Engine interface {
 	Validate(ctx context.Context, v value.Value) (err error)
 }
 
-type validatorImpl struct {
+type engineImpl struct {
 	validations []Validation
 }
 
-func (v *validatorImpl) Validate(ctx context.Context, validatedValue value.Value) (err error) {
+func (v *engineImpl) Validate(ctx context.Context, validatedValue value.Value) (err error) {
 	var bag ErrorBag
 	for _, validation := range v.validations {
 		err = validation.Validate(ctx, validatedValue)

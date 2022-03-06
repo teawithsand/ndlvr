@@ -1,7 +1,6 @@
 package livr
 
 type Options struct {
-	Rules             RulesSource
 	ValidationFactory ValidationFactory
 
 	// Ignores type juggling when it comes to comparing stuff.
