@@ -9,6 +9,10 @@ import (
 type ArgumentParser interface {
 	// Parses length from argument given.
 	ParseLen(ctx context.Context, arg interface{}) (sz int, err error)
+
+	// TODO(teawithsand): implement that
+	// Prases argument incoming to specifeid struct pointer like json.Unmarshal
+	// ParseStruct(ctx context.Context, arg interface{}, res interface{}) (err error)
 }
 
 type DefaultArgumentParser struct{}
