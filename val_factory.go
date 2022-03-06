@@ -70,3 +70,19 @@ func WrapNamed(name string, factory ValidationFactory) ValidationFactory {
 		Factory: factory,
 	}
 }
+
+// SimpleFieldValidation, which accesses value of field passed in build data.
+func SimpleFieldValidation(
+	require bool,
+	inner func(bctx ValidationBuildContext, vv value.Value, fieldValue value.Value) (err error),
+) ValidationFactory {
+	return ValidationAsFactory(func(bctx ValidationBuildContext, vv value.Value) (err error) {
+		fieldValue, err := value.ExpectKeyedValueField(vv, bctx.Data.FieldName, require)
+		if err != nil {
+			return
+		}
+
+		err = inner(bctx, vv, fieldValue)
+		return
+	})
+}
