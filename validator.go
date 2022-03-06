@@ -2,6 +2,8 @@ package livr
 
 import (
 	"context"
+
+	"github.com/teawithsand/livr4go/value"
 )
 
 type Options struct {
@@ -9,7 +11,7 @@ type Options struct {
 	ValidationFactory ValidationFactory
 
 	// Ignores type juggling when it comes to comparing stuff.
-	// Things like max_length stop working on numbers.
+	// Things like max_length stop working on not numbers.
 	//
 	// All lengths may not be floats.
 	//
@@ -23,17 +25,17 @@ type Options struct {
 }
 
 type Validator interface {
-	Validate(ctx context.Context, value Value) (err error)
+	Validate(ctx context.Context, v value.Value) (err error)
 }
 
 type validatorImpl struct {
 	validations []Validation
 }
 
-func (v *validatorImpl) Validate(ctx context.Context, value Value) (err error) {
+func (v *validatorImpl) Validate(ctx context.Context, validatedValue value.Value) (err error) {
 	var bag ErrorBag
 	for _, validation := range v.validations {
-		err = validation.Validate(ctx, value)
+		err = validation.Validate(ctx, validatedValue)
 		if err != nil {
 			bag.Errors = append(bag.Errors, err)
 		}
