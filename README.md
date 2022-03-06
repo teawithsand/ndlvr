@@ -1,6 +1,7 @@
 # ndlvr
 
 What started as another LIVR go library turned out to be this, since I've seen how strange stuff can LIVR do.
+This library was created because [go-livr](https://github.com/k33nice/go-livr) can't do struct validation, which is like 99.(9)% of web app use case in go apps.
 
 ## What's NDLVR?
 
