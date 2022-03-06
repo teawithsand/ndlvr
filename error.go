@@ -25,7 +25,7 @@ func (e *ValidationNameMismatchError) Error() string {
 		return "<nil>"
 	}
 
-	return fmt.Sprintf("livr: given factory supports validation '%s' but '%s' was provided", e.Name, e.ExpectedName)
+	return fmt.Sprintf("livr: given factory supports only validation '%s' but '%s' was provided", e.Name, e.ExpectedName)
 }
 
 type ValidationCreateError struct {
@@ -38,4 +38,16 @@ func (e *ValidationCreateError) Error() string {
 	}
 
 	return fmt.Sprintf("livr: filed to create validation: %s", e.Msg)
+}
+
+type ValidationNotSupportedError struct {
+	Name string
+}
+
+func (e *ValidationNotSupportedError) Error() string {
+	if e == nil {
+		return "<nil>"
+	}
+
+	return fmt.Sprintf("livr: validation '%s' is not supported by this factory", e.Name)
 }

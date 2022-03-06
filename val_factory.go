@@ -64,6 +64,7 @@ func (nvf *namedValidationFactory) BuildValidation(bctx ValidationBuildContext) 
 
 // Wraps specified factory, in one which verifies validaton name and returns error on mismatch.
 func WrapNamed(name string, factory ValidationFactory) ValidationFactory {
+	// TODO(teawithsand): make this wrapper return errors, which contain validator name
 	return &namedValidationFactory{
 		Name:    name,
 		Factory: factory,
