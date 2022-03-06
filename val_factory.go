@@ -34,6 +34,16 @@ func (f ValidationFactoryFunc) BuildValidation(bctx ValidationBuildContext) (val
 	return f(bctx)
 }
 
+type ValidationAsFactory func(bctx ValidationBuildContext, value value.Value) (err error)
+
+func (f ValidationAsFactory) BuildValidation(bctx ValidationBuildContext) (val Validation, err error) {
+	val = ValidationFunc(func(ctx context.Context, value value.Value) (err error) {
+		bctx.Ctx = ctx
+		return f(bctx, value)
+	})
+	return
+}
+
 // ValidationFactory, which returns an error when name provided in data does not match given one.
 type namedValidationFactory struct {
 	Name    string
