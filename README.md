@@ -17,3 +17,5 @@ NDLVR is like LIVR but better. It:
 * Has more JOI-style APIs and validation
 * Has more consistent rule serialization format, which is nice when you have to write parser for it(NIY, for now LIVR's is used)
 * Some other minor sttuff
+* Has single reference implementation, and all other implementation should mimic behaviour of reference one, this way bugs can be found
+  by doing fuzzing and checking if results differ.
