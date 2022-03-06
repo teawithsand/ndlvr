@@ -71,7 +71,18 @@ func (dvo *DefaultOPs) Len(val Value) (sz int, err error) {
 }
 
 func (dvo *DefaultOPs) IsEmpty(v Value) bool {
-	// TODO(teawithsand): implement more cases here
+	if v == nil {
+		return true
+	}
 	r := v.Raw()
-	return r == ""
+	refRaw := reflect.ValueOf(r)
+	for refRaw.Kind() == reflect.Ptr {
+		if refRaw.IsNil() {
+			return true
+		}
+		refRaw = refRaw.Elem()
+	}
+
+	unwrappedRaw := refRaw.Interface()
+	return unwrappedRaw == nil || unwrappedRaw == ""
 }
