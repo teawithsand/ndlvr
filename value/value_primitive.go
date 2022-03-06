@@ -1,5 +1,7 @@
 package value
 
+import "reflect"
+
 // TODO(teawtihsand): rest of primitives here
 
 /*
@@ -44,4 +46,15 @@ func (pv *PrimitiveValue) Raw() interface{} {
 		return nil
 	}
 	return pv.Val
+}
+
+// Returns value after stripping pointer layer.
+// Returns nil if any poitner is nil.
+func (pv *PrimitiveValue) RawUnpointered() interface{} {
+	v := reflect.ValueOf(pv.Val)
+	for v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+
+	return v.Interface()
 }
