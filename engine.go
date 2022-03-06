@@ -7,18 +7,19 @@ import (
 )
 
 type Engine interface {
-	Validate(ctx context.Context, v value.Value) (err error)
+	Validate(ctx context.Context, parentValue value.Value) (err error)
 }
 
 type engineImpl struct {
 	validations []Validation
 }
 
-func (v *engineImpl) Validate(ctx context.Context, validatedValue value.Value) (err error) {
+func (v *engineImpl) Validate(ctx context.Context, parentValue value.Value) (err error) {
 	var bag ErrorBag
 	for _, validation := range v.validations {
-		err = validation.Validate(ctx, validatedValue)
+		err = validation.Validate(ctx, parentValue)
 		if err != nil {
+			// panic(err)
 			bag.Errors = append(bag.Errors, err)
 		}
 	}

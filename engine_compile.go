@@ -14,7 +14,7 @@ func (opts *Options) makeValidationsMap(ctx context.Context, rules RulesSource) 
 
 	err = rules.GetRules(func(fieldName string, rawRule interface{}) (err error) {
 		err = p.ParseTopLevelEntry(fieldName, rawRule, func(rd RuleData) (err error) {
-			validation, err := opts.ValidationFactory.BuildValidation(ValidationBuildContext{
+			bctx := ValidationBuildContext{
 				Ctx:            ctx,
 				Parser:         p,
 				Options:        opts,
@@ -25,7 +25,8 @@ func (opts *Options) makeValidationsMap(ctx context.Context, rules RulesSource) 
 					ValidationName: rd.ValidationName,
 					Argument:       rd.ValidationArgument,
 				},
-			})
+			}
+			validation, err := opts.ValidationFactory.BuildValidation(bctx)
 			if err != nil {
 				return
 			}

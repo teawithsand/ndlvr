@@ -91,8 +91,7 @@ func TestLIVR(t *testing.T) {
 			"first_name": "required",
 			"last_name": ["required"],
 			"middle_name": [ { "required": [] } ],
-			"salary": { "required": [] },
-			"asdf": "required"
+			"salary": { "required": [] }
 		}`),
 	}
 

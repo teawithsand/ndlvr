@@ -7,7 +7,7 @@ import (
 var ErrExpectFiled = errors.New("livr/value: some kind of expect filed")
 
 func ExpectKeyedValueField(kv Value, fieldName interface{}, required bool) (value Value, err error) {
-	skv, ok := value.(KeyedValue)
+	skv, ok := kv.(KeyedValue)
 	if !ok {
 		err = ErrExpectFiled
 		return

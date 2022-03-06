@@ -25,21 +25,21 @@ func (reg ValidationFactoryRegistry) Set(name string, vfac ValidationFactory) {
 	reg[name] = vfac
 }
 
-func (reg ValidationFactoryRegistry) BuildValidation(ectx ValidationBuildContext) (val Validation, err error) {
+func (reg ValidationFactoryRegistry) BuildValidation(bctx ValidationBuildContext) (val Validation, err error) {
 	if reg == nil {
 		err = &ValidationNotSupportedError{
-			Name: ectx.Data.ValidationName,
+			Name: bctx.Data.ValidationName,
 		}
 		return
 	}
 
-	arg, ok := reg[ectx.Data.ValidationName]
+	arg, ok := reg[bctx.Data.ValidationName]
 	if !ok {
 		err = &ValidationNotSupportedError{
-			Name: ectx.Data.ValidationName,
+			Name: bctx.Data.ValidationName,
 		}
 		return
 	}
 
-	return arg.BuildValidation(ectx)
+	return arg.BuildValidation(bctx)
 }

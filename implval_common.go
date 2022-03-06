@@ -5,7 +5,7 @@ import (
 )
 
 func makeRequiredVF() (vf ValidationFactory) {
-	vf = SimpleFieldValidation(true, func(bctx ValidationBuildContext, vv, fieldValue value.Value) (err error) {
+	vf = SimpleFieldValidation(true, func(bctx ValidationBuildContext, parentValue, fieldValue value.Value) (err error) {
 		return
 	})
 	vf = WrapNamed("required", vf)
