@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	livr "github.com/teawithsand/livr4go"
+	"github.com/teawithsand/livr4go/builder"
 	"github.com/teawithsand/livr4go/value"
 )
 
@@ -87,12 +88,12 @@ func TestLIVR(t *testing.T) {
 			"age": "25",
 			"salary": 0
 		}`),
-		Rules: MustJSONParseRules(`{
-			"first_name": "required",
-			"last_name": ["required"],
-			"middle_name": [ { "required": [] } ],
-			"salary": { "required": [] }
-		}`),
+		Rules: (&builder.Builder{}).
+			AddRule("first_name", builder.Rule{Name: "required"}).
+			AddRule("last_name", builder.Rule{Name: "required"}).
+			AddRule("middle_name", builder.Rule{Name: "required"}).
+			AddRule("salary", builder.Rule{Name: "required"}).
+			MustBuild(),
 	}
 
 	test.Run(t)
