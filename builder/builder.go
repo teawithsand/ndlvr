@@ -7,6 +7,10 @@ type Builder struct {
 	entries map[string][]Rule
 }
 
+func NewBuilder() *Builder {
+	return &Builder{}
+}
+
 type Rule struct {
 	Name     string
 	Argument interface{}
@@ -30,6 +34,14 @@ func (b *Builder) AddRule(field string, rule Rule) *Builder {
 	b.entries[field] = append(b.entries[field], rule)
 
 	return b
+}
+
+// Adds arbitrary rule to builder
+func (b *Builder) AddSimpleRule(field string, rule string) *Builder {
+	return b.AddRule(field, Rule{
+		Name:     rule,
+		Argument: nil,
+	})
 }
 
 func (b *Builder) Build() (res ndlvr.RulesSource, err error) {

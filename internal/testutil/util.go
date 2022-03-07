@@ -1,23 +1,28 @@
-package ndlvr_test
+package testutil
 
 import (
 	"context"
 	"encoding/json"
-	"reflect"
 	"testing"
 
 	"github.com/teawithsand/ndlvr"
-	"github.com/teawithsand/ndlvr/builder"
 	"github.com/teawithsand/ndlvr/builtin"
 	"github.com/teawithsand/ndlvr/value"
 )
 
+type E2ETests = []E2ETest
+
 type E2ETest struct {
-	Input          interface{}
-	ExpectedOutput interface{}
-	ExpectedError  bool
+	Input         interface{}
+	ExpectedError error
 
 	Rules ndlvr.RulesSource
+}
+
+type AnyError struct{}
+
+func (AnyError) Error() string {
+	return "ndlvr/internal/testutil: error, which denotes, that any error may be returned"
 }
 
 func (test *E2ETest) Run(t *testing.T) {
@@ -26,6 +31,7 @@ func (test *E2ETest) Run(t *testing.T) {
 	}
 
 	ctx := context.Background()
+
 	validator, err := opts.NewEngine(ctx, test.Rules)
 	if err != nil {
 		t.Error(err)
@@ -33,7 +39,8 @@ func (test *E2ETest) Run(t *testing.T) {
 	}
 
 	err = validator.Validate(context.Background(), value.MustWrap(test.Input))
-	if test.ExpectedError {
+	if test.ExpectedError != nil {
+		// TODO(teawithsand): checking error type here
 		if err == nil {
 			t.Error("expected error; got nil")
 			return
@@ -41,11 +48,6 @@ func (test *E2ETest) Run(t *testing.T) {
 	} else {
 		if err != nil {
 			t.Error(err)
-			return
-		}
-
-		if !reflect.DeepEqual(test.ExpectedOutput, test.Input) {
-			t.Error("output mistmatch", test.ExpectedOutput)
 			return
 		}
 	}
@@ -69,33 +71,4 @@ func MustJSONParseRules(data string) ndlvr.RulesMap {
 	}
 
 	return res
-}
-
-func TestLIVR(t *testing.T) {
-	test := E2ETest{
-		Input: MustJSONParse(`
-		{
-			"first_name": "Vasya",
-			"last_name": "Pupkin",
-			"middle_name": "Some",
-			"age": "25",
-			"salary": 0
-		}`),
-		ExpectedOutput: MustJSONParse(`
-		{
-			"first_name": "Vasya",
-			"last_name": "Pupkin",
-			"middle_name": "Some",
-			"age": "25",
-			"salary": 0
-		}`),
-		Rules: (&builder.Builder{}).
-			AddRule("first_name", builder.Rule{Name: "required"}).
-			AddRule("last_name", builder.Rule{Name: "required"}).
-			AddRule("middle_name", builder.Rule{Name: "required"}).
-			AddRule("salary", builder.Rule{Name: "required"}).
-			MustBuild(),
-	}
-
-	test.Run(t)
 }
