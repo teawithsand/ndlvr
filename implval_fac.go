@@ -1,4 +1,4 @@
-package livr
+package ndlvr
 
 // MakeBuiltinFactory creates ValidationFactoryRegistry, which contains all builtin validations.
 func MakeBuiltinFactory() ValidationFactoryRegistry {

@@ -1,4 +1,4 @@
-package livr
+package ndlvr
 
 import "github.com/teawithsand/ndlvr/value"
 

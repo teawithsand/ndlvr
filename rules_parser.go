@@ -1,4 +1,4 @@
-package livr
+package ndlvr
 
 type RuleReceiver = func(rd RuleData) (err error)
 

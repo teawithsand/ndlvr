@@ -1,4 +1,4 @@
-package livr
+package ndlvr
 
 // RulesSource is just source of rules.
 // For each key it returns rules.
