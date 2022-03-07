@@ -12,7 +12,7 @@ func (e *RuleParseError) Error() string {
 		return "<nil>"
 	}
 
-	return fmt.Sprintf("livr: Rule parse filed for field: %s", e.FieldName)
+	return fmt.Sprintf("ndlvr: Rule parse filed for field: %s", e.FieldName)
 }
 
 type ValidationNameMismatchError struct {
@@ -25,7 +25,7 @@ func (e *ValidationNameMismatchError) Error() string {
 		return "<nil>"
 	}
 
-	return fmt.Sprintf("livr: given factory supports only validation '%s' but '%s' was provided", e.Name, e.ExpectedName)
+	return fmt.Sprintf("ndlvr: given factory supports only validation '%s' but '%s' was provided", e.Name, e.ExpectedName)
 }
 
 type ValidationCreateError struct {
@@ -37,7 +37,7 @@ func (e *ValidationCreateError) Error() string {
 		return "<nil>"
 	}
 
-	return fmt.Sprintf("livr: filed to create validation: %s", e.Msg)
+	return fmt.Sprintf("ndlvr: filed to create validation: %s", e.Msg)
 }
 
 type ValidationNotSupportedError struct {
@@ -49,5 +49,5 @@ func (e *ValidationNotSupportedError) Error() string {
 		return "<nil>"
 	}
 
-	return fmt.Sprintf("livr: validation '%s' is not supported by this factory", e.Name)
+	return fmt.Sprintf("ndlvr: validation '%s' is not supported by this factory", e.Name)
 }

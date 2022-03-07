@@ -17,9 +17,9 @@ func (e *ErrorBag) Error() string {
 		return "<nil>"
 	}
 
-	return fmt.Sprintf("livr: error bag with %d errors", len(e.Errors))
+	return fmt.Sprintf("ndlvr: error bag with %d errors", len(e.Errors))
 }
 
-func MakeLIVRError(msg, code string) error {
-	return fmt.Errorf("livr: [%s] %s", code, msg)
+func MakeNDLVRError(msg, code string) error {
+	return fmt.Errorf("ndlvr: [%s] %s", code, msg)
 }

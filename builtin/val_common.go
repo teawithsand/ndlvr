@@ -18,7 +18,7 @@ func makeNotEmptyVF() (vf ndlvr.ValidationFactory) {
 		true,
 		func(bctx ndlvr.ValidationBuildContext, vv, fieldValue value.Value) (err error) {
 			if bctx.OPs.IsEmpty(fieldValue) {
-				err = ndlvr.MakeLIVRError("Field must not be empty", "NOT_EMPTY")
+				err = ndlvr.MakeNDLVRError("Field must not be empty", "NOT_EMPTY")
 				return
 			}
 			return

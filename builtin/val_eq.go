@@ -18,7 +18,7 @@ func makeEqVF() (vf ndlvr.ValidationFactory) {
 			}
 
 			if !bctx.OPs.Eq(equalTo, fieldValue) {
-				err = ndlvr.MakeLIVRError("input is not equal to expected value", "NOT_EQUAL")
+				err = ndlvr.MakeNDLVRError("input is not equal to expected value", "NOT_EQUAL")
 				return
 			}
 			return
@@ -60,7 +60,7 @@ func makeOneOfVF() (vf ndlvr.ValidationFactory) {
 			}
 
 			if !foundMatch {
-				err = ndlvr.MakeLIVRError("input is not equal to any of possible values", "NOT_ONE_OF")
+				err = ndlvr.MakeNDLVRError("input is not equal to any of possible values", "NOT_ONE_OF")
 				return
 			}
 

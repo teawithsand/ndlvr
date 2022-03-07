@@ -23,7 +23,7 @@ func makeMinLengthVF() (vf ndlvr.ValidationFactory) {
 			}
 
 			if len(sv) < sz {
-				err = ndlvr.MakeLIVRError("input is too short", "TOO_SHORT")
+				err = ndlvr.MakeNDLVRError("input is too short", "TOO_SHORT")
 				return
 			}
 			return
@@ -51,7 +51,7 @@ func makeMaxLengthVF() (vf ndlvr.ValidationFactory) {
 			}
 
 			if len(sv) > sz {
-				err = ndlvr.MakeLIVRError("input is too short", "TOO_LONG")
+				err = ndlvr.MakeNDLVRError("input is too short", "TOO_LONG")
 				return
 			}
 			return

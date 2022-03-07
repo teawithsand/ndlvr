@@ -44,7 +44,7 @@ func assignValue(fieldRef reflect.Value, value Value) (err error) {
 
 func assignMap(mapRefVal reflect.Value, key interface{}, value Value) (err error) {
 	if mapRefVal.Kind() != reflect.Map {
-		panic("livr/value: required map reflect value")
+		panic("ndlvr/value: required map reflect value")
 	}
 
 	refValue := reflect.ValueOf(value.Raw())
@@ -76,7 +76,7 @@ func assignMap(mapRefVal reflect.Value, key interface{}, value Value) (err error
 
 func assignList(listVal reflect.Value, i int, value Value) (err error) {
 	if listVal.Kind() != reflect.Array && listVal.Kind() != reflect.Slice {
-		panic("livr/value: required array/slice reflect value")
+		panic("ndlvr/value: required array/slice reflect value")
 	}
 
 	if i > listVal.Len() || i < 0 {

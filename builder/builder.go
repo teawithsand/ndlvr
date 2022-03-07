@@ -1,6 +1,6 @@
 package builder
 
-import livr "github.com/teawithsand/ndlvr"
+import "github.com/teawithsand/ndlvr"
 
 // Builder to prettify process of creating LIVR rules.
 type Builder struct {
@@ -32,8 +32,8 @@ func (b *Builder) AddRule(field string, rule Rule) *Builder {
 	return b
 }
 
-func (b *Builder) Build() (res livr.RulesSource, err error) {
-	rm := livr.RulesMap{}
+func (b *Builder) Build() (res ndlvr.RulesSource, err error) {
+	rm := ndlvr.RulesMap{}
 	for field, rules := range b.entries {
 		for _, rule := range rules {
 			_, ok := rm[field]
@@ -55,7 +55,7 @@ func (b *Builder) Build() (res livr.RulesSource, err error) {
 	return
 }
 
-func (b *Builder) MustBuild() (res livr.RulesSource) {
+func (b *Builder) MustBuild() (res ndlvr.RulesSource) {
 	res, err := b.Build()
 	if err != nil {
 		panic(err)

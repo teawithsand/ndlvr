@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-var ErrNotStringable = errors.New("livr/value: specified value can't be converted to string")
+var ErrNotStringable = errors.New("ndlvr/value: specified value can't be converted to string")
 
 type NotAssignableValueError struct {
 	To    reflect.Type
@@ -17,7 +17,7 @@ func (e *NotAssignableValueError) Error() string {
 		return "<nil>"
 	}
 
-	return "livr/value: given value can't be assigned to given field"
+	return "ndlvr/value: given value can't be assigned to given field"
 }
 
 type NotSettableValueError struct {
@@ -29,7 +29,7 @@ func (e *NotSettableValueError) Error() string {
 		return "<nil>"
 	}
 
-	return "livr/value: given value is not addressable and can't be assigned. If this is struct consider passing pointer instead of struct."
+	return "ndlvr/value: given value is not addressable and can't be assigned. If this is struct consider passing pointer instead of struct."
 }
 
 type NoFieldError struct {
@@ -42,7 +42,7 @@ func (e *NoFieldError) Error() string {
 		return "<nil>"
 	}
 
-	return "livr/value: field with given name does not exist"
+	return "ndlvr/value: field with given name does not exist"
 }
 
 type InvalidValueError struct {
@@ -54,5 +54,5 @@ func (e *InvalidValueError) Error() string {
 		return "<nil>"
 	}
 
-	return "livr/value: given data can't be wrapped as livr value"
+	return "ndlvr/value: given data can't be wrapped as ndlvr value"
 }

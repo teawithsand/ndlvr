@@ -13,7 +13,7 @@ type ValidationFactoryRegistry map[string]ValidationFactory
 func (reg ValidationFactoryRegistry) MustPut(name string, vfac ValidationFactory) {
 	_, ok := reg[name]
 	if ok {
-		panic(fmt.Errorf("livr: validation registry put filed: validation '%s' is already set", name))
+		panic(fmt.Errorf("ndlvr: validation registry put filed: validation '%s' is already set", name))
 	}
 	reg[name] = vfac
 }
