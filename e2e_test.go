@@ -1,4 +1,4 @@
-package testing_test
+package ndlvr_test
 
 import (
 	"context"
