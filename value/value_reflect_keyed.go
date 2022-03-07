@@ -49,6 +49,9 @@ func (rkv *reflectKeyedValue) GetField(key interface{}) (res Value, err error) {
 			return
 		}
 		v := iv.FieldByName(skey)
+		if isReflectZero(v) {
+			return nil, nil
+		}
 
 		res, err = Wrap(v.Interface())
 		return
