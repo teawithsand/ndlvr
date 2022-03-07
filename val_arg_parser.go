@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/teawithsand/livr4go/value"
+	"github.com/teawithsand/ndlvr/value"
 )
 
 // Helper, which makes parsing incoming validation's argument simpler.

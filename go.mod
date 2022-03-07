@@ -1,3 +1,3 @@
-module github.com/teawithsand/livr4go
+module github.com/teawithsand/ndlvr
 
 go 1.17

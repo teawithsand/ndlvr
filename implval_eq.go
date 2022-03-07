@@ -1,6 +1,6 @@
 package livr
 
-import "github.com/teawithsand/livr4go/value"
+import "github.com/teawithsand/ndlvr/value"
 
 func makeEqVF() (vf ValidationFactory) {
 	vf = SimpleFieldValidation(

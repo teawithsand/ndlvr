@@ -6,9 +6,9 @@ import (
 	"reflect"
 	"testing"
 
-	livr "github.com/teawithsand/livr4go"
-	"github.com/teawithsand/livr4go/builder"
-	"github.com/teawithsand/livr4go/value"
+	livr "github.com/teawithsand/ndlvr"
+	"github.com/teawithsand/ndlvr/builder"
+	"github.com/teawithsand/ndlvr/value"
 )
 
 type E2ETest struct {

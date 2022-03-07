@@ -1,6 +1,6 @@
 package builder
 
-import livr "github.com/teawithsand/livr4go"
+import livr "github.com/teawithsand/ndlvr"
 
 // Builder to prettify process of creating LIVR rules.
 type Builder struct {

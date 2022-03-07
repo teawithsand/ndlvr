@@ -3,7 +3,7 @@ package livr
 import (
 	"context"
 
-	"github.com/teawithsand/livr4go/value"
+	"github.com/teawithsand/ndlvr/value"
 )
 
 // Validation validates specified key, but has access to whole value, so things like checking if fields are same work.

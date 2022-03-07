@@ -3,7 +3,7 @@ package livr
 import (
 	"context"
 
-	"github.com/teawithsand/livr4go/value"
+	"github.com/teawithsand/ndlvr/value"
 )
 
 type ValidationBuildData struct {

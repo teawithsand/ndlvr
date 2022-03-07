@@ -1,7 +1,7 @@
 package livr
 
 import (
-	"github.com/teawithsand/livr4go/value"
+	"github.com/teawithsand/ndlvr/value"
 )
 
 func makeRequiredVF() (vf ValidationFactory) {
