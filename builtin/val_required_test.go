@@ -37,7 +37,7 @@ func Test_Required(t *testing.T) {
 	tests = append(tests, testutil.E2ETest{
 		Input: FieldStruct{},
 		Rules: builder.NewBuilder().
-			AddSimpleRule("field", "required").
+			AddSimpleRule("Field", "required").
 			MustBuild(),
 	})
 
