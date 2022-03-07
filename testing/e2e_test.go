@@ -6,8 +6,9 @@ import (
 	"reflect"
 	"testing"
 
-	livr "github.com/teawithsand/ndlvr"
+	"github.com/teawithsand/ndlvr"
 	"github.com/teawithsand/ndlvr/builder"
+	"github.com/teawithsand/ndlvr/builtin"
 	"github.com/teawithsand/ndlvr/value"
 )
 
@@ -16,12 +17,12 @@ type E2ETest struct {
 	ExpectedOutput interface{}
 	ExpectedError  bool
 
-	Rules livr.RulesSource
+	Rules ndlvr.RulesSource
 }
 
 func (test *E2ETest) Run(t *testing.T) {
-	opts := livr.Options{
-		ValidationFactory: livr.MakeBuiltinFactory(),
+	opts := ndlvr.Options{
+		ValidationFactory: builtin.MakeBuiltinFactory(),
 	}
 
 	ctx := context.Background()
@@ -60,8 +61,8 @@ func MustJSONParse(data string) interface{} {
 	return res
 }
 
-func MustJSONParseRules(data string) livr.RulesMap {
-	var res livr.RulesMap
+func MustJSONParseRules(data string) ndlvr.RulesMap {
+	var res ndlvr.RulesMap
 	err := json.Unmarshal([]byte(data), &res)
 	if err != nil {
 		panic(err)

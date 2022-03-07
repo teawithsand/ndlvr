@@ -1,8 +1,10 @@
-package ndlvr
+package builtin
+
+import "github.com/teawithsand/ndlvr"
 
 // MakeBuiltinFactory creates ValidationFactoryRegistry, which contains all builtin validations.
-func MakeBuiltinFactory() ValidationFactoryRegistry {
-	fac := make(ValidationFactoryRegistry)
+func MakeBuiltinFactory() ndlvr.ValidationFactoryRegistry {
+	fac := make(ndlvr.ValidationFactoryRegistry)
 	// general "empty" stuff
 	fac.MustPut("required", makeRequiredVF())
 	fac.MustPut("not_empty", makeNotEmptyVF())
