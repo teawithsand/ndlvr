@@ -10,7 +10,7 @@ type, which can contain any data.
 
 ## What's NDLVR?
 
-Not-dynamic-langauge validation rules is set of improvements over LIVR that I've designed.
+Not-dynamic-language validation rules is set of improvements over LIVR that I've designed.
 
 NDLVR is like LIVR but better. It:
 * Is like LIVR
@@ -22,7 +22,7 @@ NDLVR is like LIVR but better. It:
   In general makes filters work only with types they were designed to work with. Regex on numbers does not work as well.
 * Has JOI-style builders for rules, so JSON does not have to be written by hand, which is nice.
 * Some other minor stuff
-* Has single reference implementation(go one), and all other implementations should mimic behaviour of reference one, this way bugs can be found
+* Has single reference implementation(go one), and all other implementations should mimic behavior of reference one, this way bugs can be found
   by doing fuzzing and checking if results differ.
 
-Aside from changes above it's compatibile with LIVR and for most use cases can be just used with existing LIVR rules and libraries.
+Aside from changes above it's compatible with LIVR and for most use cases can be just used with existing LIVR rules and libraries.
