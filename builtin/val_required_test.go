@@ -42,6 +42,17 @@ func Test_Required(t *testing.T) {
 			MustBuild(),
 	})
 
+	tests = append(tests, testutil.E2ETest{
+		Input: testutil.MustJSONParse(`
+		{
+			"field": "text"
+		}`),
+		ExpectedError: testutil.AnyError{},
+		Rules: builder.NewBuilder().
+			AddSimpleRule("other-field", "required").
+			MustBuild(),
+	})
+
 	tests.Mutate(func(t *testutil.E2ETest) {
 		t.Wrapper = &value.DefaultWrapper{
 			UseJSONNames: true,
