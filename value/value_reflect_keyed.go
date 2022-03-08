@@ -29,49 +29,29 @@ func isReflectZero(v reflect.Value) bool {
 	return v == reflect.Value{}
 }
 
+func (rkv *reflectKeyedValue) innerGetReflectField(key interface{}) (v reflect.Value) {
+	iv := rkv.getInnerValue()
+	return getMapOrStructField(iv, key)
+}
+
 // Panics when no such field.
 // Must not return nil in that case.
 //
 // Returns nil value if field was not found.
 func (rkv *reflectKeyedValue) GetField(key interface{}) (res Value, err error) {
-	iv := rkv.getInnerValue()
-
-	if iv.Kind() == reflect.Map {
-		v := iv.MapIndex(reflect.ValueOf(key))
-		if isReflectZero(v) {
-			return nil, nil
-		}
-
-		res, err = rkv.wrapper.Wrap(v.Interface())
+	v := rkv.innerGetReflectField(key)
+	if isReflectZero(v) {
 		return
 	} else {
-		skey, ok := key.(string)
-		if !ok {
-			return
-		}
-		v := iv.FieldByName(skey)
-		if isReflectZero(v) {
-			return nil, nil
-		}
-
 		res, err = rkv.wrapper.Wrap(v.Interface())
 		return
 	}
+
 }
 
 // Returns true if given field exists in value, false otherwise.
 func (rkv *reflectKeyedValue) HasField(key interface{}) bool {
-	iv := rkv.getInnerValue()
-
-	if iv.Kind() == reflect.Map {
-		return !isReflectZero(iv.MapIndex(reflect.ValueOf(key)))
-	} else {
-		sname, ok := key.(string)
-		if !ok {
-			return false
-		}
-		return !isReflectZero(iv.FieldByName(sname))
-	}
+	return !isReflectZero(rkv.innerGetReflectField(key))
 }
 
 // Iteration must stop when non-nil error is returned.
@@ -116,25 +96,6 @@ type mutableReflectKeyedValue struct {
 	reflectKeyedValue
 }
 
-func (mrkv *mutableReflectKeyedValue) getReflectField(key interface{}) reflect.Value {
-	iv := mrkv.getInnerValue()
-
-	if iv.Kind() == reflect.Map {
-		v := iv.MapIndex(reflect.ValueOf(key))
-		if isReflectZero(v) {
-			return reflect.Value{}
-		}
-
-		return v
-	} else {
-		skey, ok := key.(string)
-		if !ok {
-			return reflect.Value{}
-		}
-		return iv.FieldByName(skey)
-	}
-}
-
 func (mrkv *mutableReflectKeyedValue) IsAssignable(key interface{}, value Value) bool {
 	if !mrkv.HasField(key) {
 		return false
@@ -144,8 +105,7 @@ func (mrkv *mutableReflectKeyedValue) IsAssignable(key interface{}, value Value)
 	if iv.Kind() == reflect.Map {
 		return isAssignable(iv.Type().Elem(), value)
 	} else {
-		fieldType := mrkv.getReflectField(key).Type()
-
+		fieldType := mrkv.reflectKeyedValue.innerGetReflectField(key).Type()
 		return isAssignable(fieldType, value)
 	}
 }
@@ -167,7 +127,7 @@ func (mrkv *mutableReflectKeyedValue) SetField(key interface{}, value Value) (er
 		}
 		return
 	} else {
-		fieldRef := mrkv.getReflectField(key)
+		fieldRef := mrkv.reflectKeyedValue.innerGetReflectField(key)
 		err = assignValue(fieldRef, value)
 		if err != nil {
 			return
