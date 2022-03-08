@@ -5,6 +5,7 @@ import (
 
 	"github.com/teawithsand/ndlvr/builder"
 	"github.com/teawithsand/ndlvr/internal/testutil"
+	"github.com/teawithsand/ndlvr/value"
 )
 
 func Test_Required(t *testing.T) {
@@ -37,8 +38,14 @@ func Test_Required(t *testing.T) {
 	tests = append(tests, testutil.E2ETest{
 		Input: FieldStruct{},
 		Rules: builder.NewBuilder().
-			AddSimpleRule("Field", "required").
+			AddSimpleRule("field", "required").
 			MustBuild(),
+	})
+
+	tests.Mutate(func(t *testutil.E2ETest) {
+		t.Wrapper = &value.DefaultWrapper{
+			UseJSONNames: true,
+		}
 	})
 
 	for _, test := range tests {

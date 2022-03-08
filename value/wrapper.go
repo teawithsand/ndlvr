@@ -1,6 +1,8 @@
 package value
 
-import "reflect"
+import (
+	"reflect"
+)
 
 // Type, which wraps arbitrary type in a Value interface.
 type Wrapper interface {
@@ -16,6 +18,9 @@ func WrapperMustWrap(v Value, err error) (res Value) {
 }
 
 type DefaultWrapper struct {
+	// If true, uses JSON names instead of actual field names when structure is wrapped.
+	// Behavior is undefined, when json field tags are invalid
+	UseJSONNames bool
 }
 
 // Util function, which converts go native type to Value.
@@ -85,4 +90,53 @@ func (dw *DefaultWrapper) Wrap(data interface{}) (v Value, err error) {
 			return
 		}
 	}
+}
+
+func (dw *DefaultWrapper) GetAlias(v KeyedValue, key interface{}) (alias interface{}, err error) {
+	if !dw.UseJSONNames {
+		alias = key
+		return
+	}
+
+	refRaw := reflect.ValueOf(v.Raw())
+	for refRaw.Kind() == reflect.Ptr {
+		if refRaw.IsNil() {
+			// error here?
+			alias = key
+			return
+		}
+		refRaw = refRaw.Elem()
+	}
+
+	// ignore non-struct
+	if refRaw.Kind() != reflect.Struct {
+		alias = key
+		return
+	}
+
+	// TODO(teawithsand): cache this name map for performance
+	nameMap := map[string]string{}
+
+	// TODO(teawithsand): cache this, do something similar like JSON encoder
+	length := refRaw.NumField()
+	for i := 0; i < length; i++ {
+		typeField := refRaw.Type().Field(i)
+
+		jsonName, ok := getJSONFieldName(typeField.Tag.Get("json"))
+		if ok {
+			nameMap[jsonName] = typeField.Name
+		}
+	}
+
+	stringKey, ok := key.(string)
+	if !ok {
+		alias = key
+		return
+	}
+
+	alias, ok = nameMap[stringKey]
+	if !ok {
+		alias = key
+	}
+	return
 }

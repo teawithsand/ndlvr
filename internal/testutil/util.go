@@ -10,13 +10,20 @@ import (
 	"github.com/teawithsand/ndlvr/value"
 )
 
-type E2ETests = []E2ETest
+type E2ETests []E2ETest
+
+func (tests E2ETests) Mutate(m func(t *E2ETest)) {
+	for i := range tests {
+		m(&tests[i])
+	}
+}
 
 type E2ETest struct {
 	Input         interface{}
 	ExpectedError error
 
-	Rules ndlvr.RulesSource
+	Wrapper value.Wrapper
+	Rules   ndlvr.RulesSource
 }
 
 type AnyError struct{}
@@ -38,7 +45,12 @@ func (test *E2ETest) Run(t *testing.T) {
 		return
 	}
 
-	err = validator.Validate(context.Background(), value.MustWrap(test.Input))
+	var w value.Wrapper = &value.DefaultWrapper{}
+	if test.Wrapper != nil {
+		w = test.Wrapper
+	}
+
+	err = validator.Validate(context.Background(), value.WrapperMustWrap(w.Wrap(test.Input)))
 	if test.ExpectedError != nil {
 		// TODO(teawithsand): checking error type here
 		if err == nil {
