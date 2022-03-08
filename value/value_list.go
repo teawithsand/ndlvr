@@ -3,7 +3,8 @@ package value
 import "reflect"
 
 type defaultListValue struct {
-	val reflect.Value
+	val     reflect.Value
+	wrapper Wrapper
 }
 
 var _ ListValue = &defaultListValue{}
@@ -25,7 +26,7 @@ func (lvw *defaultListValue) Raw() interface{} {
 
 func (lvw *defaultListValue) GetIndex(i int) (res Value, err error) {
 	iv := lvw.getInnerValue()
-	res, err = Wrap(iv.Index(i).Interface())
+	res, err = lvw.wrapper.Wrap(iv.Index(i).Interface())
 	return
 }
 

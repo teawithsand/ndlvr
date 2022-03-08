@@ -6,7 +6,8 @@ import (
 
 // reflectKeyedValue wraps any map or struct into value.
 type reflectKeyedValue struct {
-	val reflect.Value
+	val     reflect.Value
+	wrapper Wrapper
 }
 
 var _ KeyedValue = &reflectKeyedValue{}
@@ -41,7 +42,7 @@ func (rkv *reflectKeyedValue) GetField(key interface{}) (res Value, err error) {
 			return nil, nil
 		}
 
-		res, err = Wrap(v.Interface())
+		res, err = rkv.wrapper.Wrap(v.Interface())
 		return
 	} else {
 		skey, ok := key.(string)
@@ -53,7 +54,7 @@ func (rkv *reflectKeyedValue) GetField(key interface{}) (res Value, err error) {
 			return nil, nil
 		}
 
-		res, err = Wrap(v.Interface())
+		res, err = rkv.wrapper.Wrap(v.Interface())
 		return
 	}
 }

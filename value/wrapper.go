@@ -1,19 +1,25 @@
 package value
 
-import (
-	"reflect"
-)
+import "reflect"
 
-func MustWrap(data interface{}) (v Value) {
-	v, err := Wrap(data)
+// Type, which wraps arbitrary type in a Value interface.
+type Wrapper interface {
+	Wrap(v interface{}) (res Value, err error)
+}
+
+func WrapperMustWrap(v Value, err error) (res Value) {
+	res = v
 	if err != nil {
 		panic(err)
 	}
 	return
 }
 
+type DefaultWrapper struct {
+}
+
 // Util function, which converts go native type to Value.
-func Wrap(data interface{}) (v Value, err error) {
+func (dw *DefaultWrapper) Wrap(data interface{}) (v Value, err error) {
 	if data == nil {
 		v = nil
 		return
@@ -57,19 +63,21 @@ func Wrap(data interface{}) (v Value, err error) {
 		if innerRefVal.Kind() == reflect.Map || innerRefVal.Kind() == reflect.Struct {
 			v = &mutableReflectKeyedValue{
 				reflectKeyedValue: reflectKeyedValue{
-					val: refVal,
+					val:     refVal,
+					wrapper: dw,
 				},
 			}
 			return
 		} else if innerRefVal.Kind() == reflect.Slice || innerRefVal.Kind() == reflect.Array {
 			v = &defaultMutableListValue{
 				defaultListValue: defaultListValue{
-					val: refVal,
+					val:     refVal,
+					wrapper: dw,
 				},
 			}
 			return
 		} else if refVal.Kind() == reflect.Ptr {
-			return Wrap(innerRefVal.Interface())
+			return dw.Wrap(innerRefVal.Interface())
 		} else {
 			err = &InvalidValueError{
 				Data: data,
