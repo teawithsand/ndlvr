@@ -8,6 +8,11 @@ This library was created because [go-livr](https://github.com/k33nice/go-livr) c
 type, which can contain any data.
 
 
+## Features 
+LIVR compatibility, when no type juggling is done.
+LIVR will accept both JSON "2" and 2, where this library, depending on validator will use only one of these.
+Also all modifiers are ignored, or return error during validator compilation.
+
 ## What's NDLVR?
 
 Not-dynamic-language validation rules is set of improvements over LIVR that I've designed.
