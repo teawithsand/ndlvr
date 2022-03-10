@@ -13,6 +13,7 @@ func MakeBuiltinFactory() ndlvr.ValidationFactoryRegistry {
 	fac.MustPut("is_string", makeIsStringVF())
 	fac.MustPut("min_length", makeMinLengthVF())
 	fac.MustPut("max_length", makeMaxLengthVF())
+	fac.MustPut("email", makeEmailVF(true))
 
 	fac.MustPut("eq", makeEqVF())
 	fac.MustPut("one_of", makeOneOfVF())
