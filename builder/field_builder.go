@@ -38,6 +38,20 @@ func (b *FieldBuilder) AddNotEmpty() *FieldBuilder {
 	return b.AddSimpleRule("not_empty")
 }
 
+func (b *FieldBuilder) AddMaxLength(sz int) *FieldBuilder {
+	return b.AddRule(Rule{
+		Name:     "max_length",
+		Argument: sz,
+	})
+}
+
+func (b *FieldBuilder) AddMinLength(sz int) *FieldBuilder {
+	return b.AddRule(Rule{
+		Name:     "min_length",
+		Argument: sz,
+	})
+}
+
 func (b *FieldBuilder) Done() *Builder {
 	return b.Builder
 }
