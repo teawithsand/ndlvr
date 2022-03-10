@@ -17,6 +17,8 @@ type engineImpl struct {
 func (v *engineImpl) Validate(ctx context.Context, parentValue value.Value) (err error) {
 	var bag ErrorBag
 	for _, validation := range v.validations {
+		// TODO(teawithsand): omit validation when field is already validated with error result + better per field errors
+
 		err = validation.Validate(ctx, parentValue)
 		if err != nil {
 			// panic(err)
