@@ -16,6 +16,7 @@ func MakeBuiltinFactory() ndlvr.ValidationFactoryRegistry {
 
 	fac.MustPut("eq", makeEqVF())
 	fac.MustPut("one_of", makeOneOfVF())
+	fac.MustPut("like", makeLikeValidator(false))
 
 	// equal stuff
 	return fac
