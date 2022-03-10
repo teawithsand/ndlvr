@@ -16,6 +16,14 @@ type Rule struct {
 	Argument interface{}
 }
 
+func (b *Builder) AddRequired(field string) *Builder {
+	return b.AddSimpleRule(field, "required")
+}
+
+func (b *Builder) AddNotEmpty(field string) *Builder {
+	return b.AddSimpleRule(field, "not_empty")
+}
+
 // Like add rule but for predefined rules.
 func (b *Builder) addPredefinedRule(field string, rule Rule) *Builder {
 	if b.entries == nil {
@@ -42,6 +50,13 @@ func (b *Builder) AddSimpleRule(field string, rule string) *Builder {
 		Name:     rule,
 		Argument: nil,
 	})
+}
+
+func (b *Builder) Field(field string) *FieldBuilder {
+	return &FieldBuilder{
+		Builder: b,
+		Field:   field,
+	}
 }
 
 func (b *Builder) Build() (res ndlvr.RulesSource, err error) {
