@@ -3,12 +3,24 @@ package builder
 import "regexp"
 
 type FieldBuilder struct {
-	Builder *Builder
-	Field   string
+	rules []Rule
+}
+
+func NewFieldBuilder() *FieldBuilder {
+	return &FieldBuilder{}
+}
+
+func (b *FieldBuilder) Clone() *FieldBuilder {
+	rules := make([]Rule, len(b.rules))
+	copy(rules, b.rules)
+
+	return &FieldBuilder{
+		rules: rules,
+	}
 }
 
 func (b *FieldBuilder) AddRule(rule Rule) *FieldBuilder {
-	b.Builder.addPredefinedRule(b.Field, rule)
+	b.rules = append(b.rules, rule)
 
 	return b
 }
@@ -21,7 +33,7 @@ func (b *FieldBuilder) AddSimpleRule(rule string) *FieldBuilder {
 }
 
 // Adds "like" rule and panics when regex is not valid.
-func (b *FieldBuilder) AddLikeRule(regex string) *FieldBuilder {
+func (b *FieldBuilder) MustAddLikeRule(regex string) *FieldBuilder {
 	regexp.MustCompile(regex)
 
 	return b.AddRule(Rule{
@@ -52,6 +64,6 @@ func (b *FieldBuilder) AddMinLength(sz int) *FieldBuilder {
 	})
 }
 
-func (b *FieldBuilder) Done() *Builder {
-	return b.Builder
+func (b *FieldBuilder) Build() []Rule {
+	return b.rules
 }

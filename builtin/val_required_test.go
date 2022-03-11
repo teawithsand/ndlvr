@@ -21,7 +21,7 @@ func Test_Required(t *testing.T) {
 			"field": "asdf"
 		}`),
 		Rules: builder.NewBuilder().
-			AddSimpleRule("field", "required").
+			AddFieldBuilder("field", builder.NewFieldBuilder().AddRequired()).
 			MustBuild(),
 	})
 
@@ -31,14 +31,14 @@ func Test_Required(t *testing.T) {
 			"field": { "asdf": "fdsa" }
 		}`),
 		Rules: builder.NewBuilder().
-			AddSimpleRule("field", "required").
+			AddFieldBuilder("field", builder.NewFieldBuilder().AddRequired()).
 			MustBuild(),
 	})
 
 	tests = append(tests, testutil.E2ETest{
 		Input: FieldStruct{},
 		Rules: builder.NewBuilder().
-			AddSimpleRule("field", "required").
+			AddFieldBuilder("field", builder.NewFieldBuilder().AddRequired()).
 			MustBuild(),
 	})
 
@@ -49,7 +49,7 @@ func Test_Required(t *testing.T) {
 		}`),
 		ExpectedError: testutil.AnyError{},
 		Rules: builder.NewBuilder().
-			AddSimpleRule("other-field", "required").
+			AddFieldBuilder("other-field", builder.NewFieldBuilder().AddRequired()).
 			MustBuild(),
 	})
 

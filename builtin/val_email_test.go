@@ -11,16 +11,16 @@ import (
 func Test_Email(t *testing.T) {
 	var tests testutil.E2ETests
 
+	rules := builder.NewBuilder().
+		AddFieldBuilder("field", builder.NewFieldBuilder().AddSimpleRule("email")).
+		MustBuild()
+
 	tests = append(tests, testutil.E2ETest{
 		Input: testutil.MustJSONParse(`
 		{
 			"field": "email@gmail.com"
 		}`),
-		Rules: builder.NewBuilder().
-			Field("field").
-			AddSimpleRule("email").
-			Done().
-			MustBuild(),
+		Rules: rules,
 	})
 
 	tests = append(tests, testutil.E2ETest{
@@ -29,11 +29,7 @@ func Test_Email(t *testing.T) {
 			"field": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@gmail.com"
 		}`),
 		ExpectedError: testutil.AnyError{},
-		Rules: builder.NewBuilder().
-			Field("field").
-			AddSimpleRule("email").
-			Done().
-			MustBuild(),
+		Rules:         rules,
 	})
 
 	tests = append(tests, testutil.E2ETest{
@@ -42,11 +38,7 @@ func Test_Email(t *testing.T) {
 			"field": "garbage"
 		}`),
 		ExpectedError: testutil.AnyError{},
-		Rules: builder.NewBuilder().
-			Field("field").
-			AddSimpleRule("email").
-			Done().
-			MustBuild(),
+		Rules:         rules,
 	})
 
 	tests = append(tests, testutil.E2ETest{
@@ -55,11 +47,7 @@ func Test_Email(t *testing.T) {
 			"field": "garbage"
 		}`),
 		ExpectedError: testutil.AnyError{},
-		Rules: builder.NewBuilder().
-			Field("field").
-			AddSimpleRule("email").
-			Done().
-			MustBuild(),
+		Rules:         rules,
 	})
 
 	tests.Mutate(func(t *testutil.E2ETest) {

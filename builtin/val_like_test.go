@@ -21,9 +21,7 @@ func Test_Like(t *testing.T) {
 			"field": "asdf"
 		}`),
 		Rules: builder.NewBuilder().
-			Field("field").
-			AddLikeRule("^asdf$").
-			Done().
+			AddFieldBuilder("field", builder.NewFieldBuilder().MustAddLikeRule("^asdf$")).
 			MustBuild(),
 	})
 
@@ -33,9 +31,7 @@ func Test_Like(t *testing.T) {
 			"field": "fdsa"
 		}`),
 		Rules: builder.NewBuilder().
-			Field("field").
-			AddLikeRule("^asdf$").
-			Done().
+			AddFieldBuilder("field", builder.NewFieldBuilder().MustAddLikeRule("^asdf$")).
 			MustBuild(),
 		ExpectedError: testutil.AnyError{},
 	})

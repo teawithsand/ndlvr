@@ -17,9 +17,7 @@ func Test_MinLength(t *testing.T) {
 			"field": "asdf"
 		}`),
 		Rules: builder.NewBuilder().
-			Field("field").
-			AddMinLength(4).
-			Done().
+			AddFieldBuilder("field", builder.NewFieldBuilder().AddMinLength(4)).
 			MustBuild(),
 	})
 
@@ -30,9 +28,7 @@ func Test_MinLength(t *testing.T) {
 		}`),
 		ExpectedError: testutil.AnyError{},
 		Rules: builder.NewBuilder().
-			Field("field").
-			AddMinLength(5).
-			Done().
+			AddFieldBuilder("field", builder.NewFieldBuilder().AddMinLength(5)).
 			MustBuild(),
 	})
 
@@ -59,9 +55,7 @@ func Test_MaxLength(t *testing.T) {
 			"field": "asdf"
 		}`),
 		Rules: builder.NewBuilder().
-			Field("field").
-			AddMaxLength(4).
-			Done().
+			AddFieldBuilder("field", builder.NewFieldBuilder().AddMaxLength(4)).
 			MustBuild(),
 	})
 
@@ -72,9 +66,7 @@ func Test_MaxLength(t *testing.T) {
 		}`),
 		ExpectedError: testutil.AnyError{},
 		Rules: builder.NewBuilder().
-			Field("field").
-			AddMaxLength(4).
-			Done().
+			AddFieldBuilder("field", builder.NewFieldBuilder().AddMaxLength(4)).
 			MustBuild(),
 	})
 
