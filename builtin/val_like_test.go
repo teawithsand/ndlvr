@@ -11,10 +11,6 @@ import (
 func Test_Like(t *testing.T) {
 	var tests testutil.E2ETests
 
-	type FieldStruct struct {
-		Field string `json:"field"`
-	}
-
 	tests = append(tests, testutil.E2ETest{
 		Input: testutil.MustJSONParse(`
 		{

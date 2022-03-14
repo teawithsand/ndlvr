@@ -15,10 +15,13 @@ func MakeBuiltinFactory() ndlvr.ValidationFactoryRegistry {
 	fac.MustPut("max_length", makeMaxLengthVF())
 	fac.MustPut("email", makeEmailVF(true))
 
+	// equal stuff
 	fac.MustPut("eq", makeEqVF())
 	fac.MustPut("one_of", makeOneOfVF())
 	fac.MustPut("like", makeLikeValidator(false))
 
-	// equal stuff
+	// embedded structures stuff: list/objects
+	fac.MustPut("list_of", makeListOfValidator())
+
 	return fac
 }
