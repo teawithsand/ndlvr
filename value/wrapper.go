@@ -17,6 +17,8 @@ func WrapperMustWrap(v Value, err error) (res Value) {
 	return
 }
 
+// TODO(teawithsand): implement support for embedded structures in JSON-like manner
+
 type DefaultWrapper struct {
 	// If true, uses JSON names instead of actual field names when structure is wrapped.
 	// Behavior is undefined, when json field tags are invalid
