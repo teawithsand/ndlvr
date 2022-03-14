@@ -10,19 +10,19 @@ type ValidationFactoryRegistry map[string]ValidationFactory
 // MustPut puts ValidationFactory with given name.
 // Fails if one with given name is already set.
 // Registry must not be nil map.
-func (reg ValidationFactoryRegistry) MustPut(name string, vfac ValidationFactory) {
+func (reg ValidationFactoryRegistry) MustPut(name string, valFac ValidationFactory) {
 	_, ok := reg[name]
 	if ok {
 		panic(fmt.Errorf("ndlvr: validation registry put filed: validation '%s' is already set", name))
 	}
-	reg[name] = vfac
+	reg[name] = valFac
 }
 
 // Sets ValidationFactory with given name.
 // Overrides one if was set already.
 // Registry must not be nil map.
-func (reg ValidationFactoryRegistry) Set(name string, vfac ValidationFactory) {
-	reg[name] = vfac
+func (reg ValidationFactoryRegistry) Set(name string, valFac ValidationFactory) {
+	reg[name] = valFac
 }
 
 func (reg ValidationFactoryRegistry) BuildValidation(bctx ValidationBuildContext) (val Validation, err error) {

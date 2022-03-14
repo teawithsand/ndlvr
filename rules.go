@@ -28,9 +28,9 @@ type RulesSource interface {
 	GetRules(recv func(rawRule interface{}) (err error)) (err error)
 }
 
-type SliceRulesSource []interface{}
+type SliceRules []interface{}
 
-func (srs SliceRulesSource) GetRules(recv func(rawRule interface{}) (err error)) (err error) {
+func (srs SliceRules) GetRules(recv func(rawRule interface{}) (err error)) (err error) {
 	for _, r := range srs {
 		err = recv(r)
 		if err != nil {

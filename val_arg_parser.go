@@ -15,7 +15,7 @@ type ArgumentParser interface {
 	ParseListValue(ctx context.Context, arg interface{}) (lv value.ListValue, err error)
 
 	// TODO(teawithsand): implement that
-	// Prases argument incoming to specifeid struct pointer like json.Unmarshal
+	// Parses argument incoming to specified struct pointer like json.Unmarshal
 	// ParseStruct(ctx context.Context, arg interface{}, res interface{}) (err error)
 }
 
@@ -28,7 +28,7 @@ func (parser *DefaultArgumentParser) ParseLen(ctx context.Context, v interface{}
 		return
 
 	// TODO(teawithsand): javascript would handle all length comparison on floats
-	//  so this behaviour is incompatibile with what JS would do if there is FP part in number/
+	//  so this behavior is incompatible with what JS would do if there is FP part in number/
 	case float32:
 		res = int(tv)
 		return

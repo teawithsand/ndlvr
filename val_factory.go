@@ -6,7 +6,7 @@ import (
 	"github.com/teawithsand/ndlvr/value"
 )
 
-// Defines what this validation is running one
+// Defines what this validation is running on.
 type ValidationTarget struct {
 	FunctionalTarget func(v value.Value, recv func(child value.Value) (err error)) (err error)
 	IsOrphanValue    bool   // ignored when FunctionalTarget

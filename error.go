@@ -11,7 +11,7 @@ func (e *RuleParseError) Error() string {
 		return "<nil>"
 	}
 
-	return fmt.Sprintf("ndlvr: Rule parse filed")
+	return "ndlvr: Rule parse filed"
 }
 
 type ValidationNameMismatchError struct {
