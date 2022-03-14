@@ -14,6 +14,9 @@ type ArgumentParser interface {
 	ParsePrimitiveValue(ctx context.Context, arg interface{}) (pv *value.PrimitiveValue, err error)
 	ParseListValue(ctx context.Context, arg interface{}) (lv value.ListValue, err error)
 
+	ParseRulesSource(ctx context.Context, arg interface{}) (rules RulesSource, err error)
+	ParseTopRulesSource(ctx context.Context, arg interface{}) (rules TopRulesSource, err error)
+
 	// TODO(teawithsand): implement that
 	// Parses argument incoming to specified struct pointer like json.Unmarshal
 	// ParseStruct(ctx context.Context, arg interface{}, res interface{}) (err error)
@@ -68,6 +71,28 @@ func (parser *DefaultArgumentParser) ParseListValue(ctx context.Context, v inter
 	if !ok {
 		err = &ValidationCreateError{
 			Msg: fmt.Sprintf("Value is not list: %T", v),
+		}
+	}
+	return
+}
+
+func (parser *DefaultArgumentParser) ParseRulesSource(ctx context.Context, arg interface{}) (rules RulesSource, err error) {
+	switch typed := arg.(type) {
+	case []interface{}:
+		rules = SliceRules(typed)
+	default:
+		rules = SliceRules{arg}
+	}
+	return
+}
+
+func (parser *DefaultArgumentParser) ParseTopRulesSource(ctx context.Context, arg interface{}) (rules TopRulesSource, err error) {
+	switch typed := arg.(type) {
+	case map[string]interface{}:
+		rules = RulesMap(typed)
+	default:
+		err = &ValidationCreateError{
+			Msg: fmt.Sprintf("argument provided must be map of string to any type, got %T", arg),
 		}
 	}
 	return
