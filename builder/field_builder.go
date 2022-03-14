@@ -25,6 +25,15 @@ func (b *FieldBuilder) AddRule(rule Rule) *FieldBuilder {
 	return b
 }
 
+func (b *FieldBuilder) AddRuleExt(name string, argument interface{}) *FieldBuilder {
+	b.rules = append(b.rules, Rule{
+		Name:     name,
+		Argument: argument,
+	})
+
+	return b
+}
+
 func (b *FieldBuilder) AddSimpleRule(rule string) *FieldBuilder {
 	return b.AddRule(Rule{
 		Name:     rule,
@@ -62,6 +71,23 @@ func (b *FieldBuilder) AddMinLength(sz int) *FieldBuilder {
 		Name:     "min_length",
 		Argument: sz,
 	})
+}
+
+// AddBuilderRule adds rule, which requires other builder to construct it.
+// Rules like "list_of" and "list_of_objects" make use of it.
+func (b *FieldBuilder) AddListOf(fieldBuilder *FieldBuilder) *FieldBuilder {
+	return b.AddRule(Rule{
+		Name:     "list_of",
+		Argument: fieldBuilder.BuildRaw(),
+	})
+}
+
+func (b *FieldBuilder) BuildRaw() interface{} {
+	var rendered []interface{}
+	for _, r := range b.rules {
+		rendered = append(rendered, r.Render())
+	}
+	return rendered
 }
 
 func (b *FieldBuilder) Build() []Rule {
