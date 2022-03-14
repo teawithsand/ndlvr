@@ -3,8 +3,7 @@ package ndlvr
 import "fmt"
 
 type RuleParseError struct {
-	FieldName string
-	Rule      interface{}
+	Rule interface{}
 }
 
 func (e *RuleParseError) Error() string {
@@ -12,7 +11,7 @@ func (e *RuleParseError) Error() string {
 		return "<nil>"
 	}
 
-	return fmt.Sprintf("ndlvr: Rule parse filed for field: %s", e.FieldName)
+	return fmt.Sprintf("ndlvr: Rule parse filed")
 }
 
 type ValidationNameMismatchError struct {

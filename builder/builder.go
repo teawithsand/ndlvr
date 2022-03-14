@@ -76,7 +76,7 @@ func (b *Builder) AddFieldBuilder(fieldName string, fb *FieldBuilder) *Builder {
 	return b.AddFieldRules(fieldName, fb.Build())
 }
 
-func (b *Builder) MustBuild() (res ndlvr.RulesSource) {
+func (b *Builder) MustBuild() (res ndlvr.TopRulesSource) {
 	res, err := b.Build()
 	if err != nil {
 		panic(err)
@@ -84,7 +84,7 @@ func (b *Builder) MustBuild() (res ndlvr.RulesSource) {
 	return
 }
 
-func (b *Builder) Build() (res ndlvr.RulesSource, err error) {
+func (b *Builder) Build() (res ndlvr.TopRulesSource, err error) {
 	rm := ndlvr.RulesMap{}
 	for field, rules := range b.entries {
 		for _, rule := range rules {

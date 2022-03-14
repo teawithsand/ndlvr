@@ -1,9 +1,14 @@
 package ndlvr
 
+type TopLevelRuleReceiver = func(rd TopLevelRuleData) (err error)
 type RuleReceiver = func(rd RuleData) (err error)
 
+type TopLevelRuleData struct {
+	FieldName string
+	RuleData
+}
+
 type RuleData struct {
-	FieldName          string
 	ValidationName     string
 	ValidationArgument interface{}
 }
@@ -13,12 +18,11 @@ type RuleData struct {
 // For now it has no options.
 type Parser struct{}
 
-func (p *Parser) ParseTopLevelEntry(fieldName string, rawRule interface{}, recv RuleReceiver) (err error) {
+func (p *Parser) ParseTopLevelEntry(rawRule interface{}, recv RuleReceiver) (err error) {
 	switch rule := rawRule.(type) {
 	case map[string]interface{}:
 		for k, v := range rule {
 			err = recv(RuleData{
-				FieldName:          fieldName,
 				ValidationName:     k,
 				ValidationArgument: v,
 			})
@@ -28,14 +32,13 @@ func (p *Parser) ParseTopLevelEntry(fieldName string, rawRule interface{}, recv 
 		}
 	case []interface{}:
 		for _, e := range rule {
-			err = p.ParseInnerEntry(fieldName, e, recv)
+			err = p.ParseInnerEntry(e, recv)
 			if err != nil {
 				return
 			}
 		}
 	case string:
 		err = recv(RuleData{
-			FieldName:      fieldName,
 			ValidationName: rule,
 		})
 		if err != nil {
@@ -43,8 +46,7 @@ func (p *Parser) ParseTopLevelEntry(fieldName string, rawRule interface{}, recv 
 		}
 	default:
 		err = &RuleParseError{
-			FieldName: fieldName,
-			Rule:      rawRule,
+			Rule: rawRule,
 		}
 		return
 	}
@@ -61,12 +63,11 @@ func (p *Parser) ParseTopLevelEntry(fieldName string, rawRule interface{}, recv 
 // "fdsa": [ "required", { "list_of_objects" : { ... }}] // Ok
 // ...
 // ```
-func (p *Parser) ParseInnerEntry(fieldName string, rawRule interface{}, recv RuleReceiver) (err error) {
+func (p *Parser) ParseInnerEntry(rawRule interface{}, recv RuleReceiver) (err error) {
 	switch rule := rawRule.(type) {
 	case map[string]interface{}:
 		for k, v := range rule {
 			err = recv(RuleData{
-				FieldName:          fieldName,
 				ValidationName:     k,
 				ValidationArgument: v,
 			})
@@ -76,7 +77,6 @@ func (p *Parser) ParseInnerEntry(fieldName string, rawRule interface{}, recv Rul
 		}
 	case string:
 		err = recv(RuleData{
-			FieldName:      fieldName,
 			ValidationName: rule,
 		})
 		if err != nil {
@@ -84,8 +84,7 @@ func (p *Parser) ParseInnerEntry(fieldName string, rawRule interface{}, recv Rul
 		}
 	default:
 		err = &RuleParseError{
-			FieldName: fieldName,
-			Rule:      rawRule,
+			Rule: rawRule,
 		}
 	}
 	return

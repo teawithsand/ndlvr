@@ -23,7 +23,7 @@ type E2ETest struct {
 	ExpectedError error
 
 	Wrapper value.Wrapper
-	Rules   ndlvr.RulesSource
+	Rules   ndlvr.TopRulesSource
 }
 
 type AnyError struct{}

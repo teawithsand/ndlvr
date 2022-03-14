@@ -6,8 +6,18 @@ import (
 	"github.com/teawithsand/ndlvr/value"
 )
 
+// Defines what this validation is running one
+type ValidationTarget struct {
+	FieldName        string // ignored when any other is set
+	IsListValue      bool   // ignored when FT is set
+	FunctionalTarget func(v value.Value, recv func(child value.Value) (err error)) (err error)
+}
+
+// func(vt *ValidationTarget) GetIterator(v value.Value, recv func(child value.Value) (err error)) (err error)
+
 type ValidationBuildData struct {
-	FieldName      string
+	Target ValidationTarget
+
 	ValidationName string
 	Argument       interface{}
 }
@@ -77,12 +87,47 @@ func SimpleFieldValidation(
 	inner func(bctx ValidationBuildContext, parentValue value.Value, fieldValue value.Value) (err error),
 ) ValidationFactory {
 	return ValidationAsFactory(func(bctx ValidationBuildContext, vv value.Value) (err error) {
-		fieldValue, err := value.ExpectKeyedValueField(vv, bctx.Data.FieldName, require)
-		if err != nil {
-			return
-		}
+		// We operate on list or something, so parent value is not accessible
+		// TODO(teawithsand): make list valid parent value(?) instead of doing this no-parent hack
+		if bctx.Data.Target.FunctionalTarget != nil {
+			selector := bctx.Data.Target.FunctionalTarget
 
-		err = inner(bctx, vv, fieldValue)
+			err = selector(vv, func(child value.Value) (err error) {
+				err = inner(bctx, vv, child)
+				return
+			})
+			if err != nil {
+				return
+			}
+		} else if bctx.Data.Target.IsListValue {
+			var listValue value.ListValue
+			listValue, err = value.ExpectListValue(vv)
+			if err != nil {
+				return
+			}
+
+			length := listValue.Len()
+			for i := 0; i < length; i++ {
+				var nth value.Value
+				nth, err = listValue.GetIndex(i)
+				if err != nil {
+					return
+				}
+
+				err = inner(bctx, vv, nth)
+				if err != nil {
+					return
+				}
+			}
+		} else {
+			var fieldValue value.Value
+			fieldValue, err = value.ExpectKeyedValueField(vv, bctx.Data.Target.FieldName, require)
+			if err != nil {
+				return
+			}
+
+			err = inner(bctx, vv, fieldValue)
+		}
 		return
 	})
 }

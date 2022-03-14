@@ -26,6 +26,28 @@ func ExpectKeyedValueField(kv Value, fieldName interface{}, required bool) (valu
 	return
 }
 
+func ExpectKeyedValue(iv Value) (rv KeyedValue, err error) {
+	skv, ok := iv.(KeyedValue)
+	if !ok {
+		err = ErrExpectFiled
+		return
+	}
+
+	rv = skv
+	return
+}
+
+func ExpectListValue(iv Value) (rv ListValue, err error) {
+	skv, ok := iv.(ListValue)
+	if !ok {
+		err = ErrExpectFiled
+		return
+	}
+
+	rv = skv
+	return
+}
+
 func ExpectPrimitiveValue(val Value) (pv *PrimitiveValue, err error) {
 	if val == nil {
 		err = ErrExpectFiled
