@@ -8,9 +8,10 @@ import (
 
 // Defines what this validation is running one
 type ValidationTarget struct {
-	FieldName        string // ignored when any other is set
-	IsListValue      bool   // ignored when FT is set
 	FunctionalTarget func(v value.Value, recv func(child value.Value) (err error)) (err error)
+	IsOrphanValue    bool   // ignored when FunctionalTarget
+	IsListValue      bool   // ignored when FunctionalTarget or IsOrphanValue is set
+	FieldName        string // ignored when FunctionalTarget or IsOrphanValue or IsListValue is set
 }
 
 // func(vt *ValidationTarget) GetIterator(v value.Value, recv func(child value.Value) (err error)) (err error)
@@ -96,6 +97,11 @@ func SimpleFieldValidation(
 				err = inner(bctx, vv, child)
 				return
 			})
+			if err != nil {
+				return
+			}
+		} else if bctx.Data.Target.IsOrphanValue {
+			err = inner(bctx, nil, vv)
 			if err != nil {
 				return
 			}
