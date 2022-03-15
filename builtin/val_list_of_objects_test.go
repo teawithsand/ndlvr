@@ -8,7 +8,7 @@ import (
 	"github.com/teawithsand/ndlvr/value"
 )
 
-func Test_ListOf(t *testing.T) {
+func Test_ListOfObjects(t *testing.T) {
 	var tests testutil.E2ETests
 
 	tests = append(tests, testutil.E2ETest{
@@ -19,9 +19,10 @@ func Test_ListOf(t *testing.T) {
 		Rules: builder.NewBuilder().
 			AddFieldBuilder(
 				"field",
-				builder.
-					NewFieldBuilder().
-					AddListOf(builder.NewFieldBuilder().AddRequired().MustAddLikeRule("^a")),
+				builder.NewFieldBuilder().AddListOfObjects(
+					builder.NewBuilder().
+						AddFieldBuilder("asdf", builder.NewFieldBuilder().AddSimpleRule("positive_integer")),
+				),
 			).
 			MustBuild(),
 	})
@@ -29,15 +30,36 @@ func Test_ListOf(t *testing.T) {
 	tests = append(tests, testutil.E2ETest{
 		Input: testutil.MustJSONParse(`
 		{
-			"field": [123]
+			"field": [{
+				"asdf": 1234
+			}]
+		}`),
+		Rules: builder.NewBuilder().
+			AddFieldBuilder(
+				"field",
+				builder.NewFieldBuilder().AddListOfObjects(
+					builder.NewBuilder().
+						AddFieldBuilder("asdf", builder.NewFieldBuilder().AddSimpleRule("positive_integer")),
+				),
+			).
+			MustBuild(),
+	})
+
+	tests = append(tests, testutil.E2ETest{
+		Input: testutil.MustJSONParse(`
+		{
+			"field": [{
+				"asdf": "fdsa"
+			}]
 		}`),
 		ExpectedError: testutil.AnyError{},
 		Rules: builder.NewBuilder().
 			AddFieldBuilder(
 				"field",
-				builder.
-					NewFieldBuilder().
-					AddListOf(builder.NewFieldBuilder().AddRequired().MustAddLikeRule("^a")),
+				builder.NewFieldBuilder().AddListOfObjects(
+					builder.NewBuilder().
+						AddFieldBuilder("asdf", builder.NewFieldBuilder().AddSimpleRule("positive_integer")),
+				),
 			).
 			MustBuild(),
 	})
@@ -45,29 +67,20 @@ func Test_ListOf(t *testing.T) {
 	tests = append(tests, testutil.E2ETest{
 		Input: testutil.MustJSONParse(`
 		{
-			"field": ["asdf", "anna", "appearance"]
+			"field": [{
+				"asdf": 1234
+			}, {
+				"asdf": "fdsa"
+			}]
 		}`),
+		ExpectedError: testutil.AnyError{},
 		Rules: builder.NewBuilder().
 			AddFieldBuilder(
 				"field",
-				builder.
-					NewFieldBuilder().
-					AddListOf(builder.NewFieldBuilder().AddRequired().MustAddLikeRule("^a")),
-			).
-			MustBuild(),
-	})
-
-	tests = append(tests, testutil.E2ETest{
-		Input: testutil.MustJSONParse(`
-		{
-			"field": [123, 123, 1]
-		}`),
-		Rules: builder.NewBuilder().
-			AddFieldBuilder(
-				"field",
-				builder.
-					NewFieldBuilder().
-					AddListOf(builder.NewFieldBuilder().AddRequired().AddSimpleRule("positive_integer")),
+				builder.NewFieldBuilder().AddListOfObjects(
+					builder.NewBuilder().
+						AddFieldBuilder("asdf", builder.NewFieldBuilder().AddSimpleRule("positive_integer")),
+				),
 			).
 			MustBuild(),
 	})

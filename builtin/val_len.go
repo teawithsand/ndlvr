@@ -17,12 +17,28 @@ func makeMinLengthVF() (vf ndlvr.ValidationFactory) {
 				return
 			}
 
-			sv, err := value.ExpectStringValue(fieldValue)
-			if err != nil {
+			var fieldLen int
+			switch fieldValue.(type) {
+			case value.ListValue:
+				var lv value.ListValue
+				lv, err = value.ExpectListValue(fieldValue)
+				if err != nil {
+					return
+				}
+				fieldLen = lv.Len()
+			case *value.PrimitiveValue:
+				var sv string
+				sv, err = value.ExpectStringValue(fieldValue)
+				if err != nil {
+					return
+				}
+				fieldLen = len(sv)
+			default:
+				err = value.ErrExpectFiled
 				return
 			}
 
-			if len(sv) < sz {
+			if fieldLen < sz {
 				err = ndlvr.MakeNDLVRError("input is too short", "TOO_SHORT")
 				return
 			}
@@ -45,12 +61,28 @@ func makeMaxLengthVF() (vf ndlvr.ValidationFactory) {
 				return
 			}
 
-			sv, err := value.ExpectStringValue(fieldValue)
-			if err != nil {
+			var fieldLen int
+			switch fieldValue.(type) {
+			case value.ListValue:
+				var lv value.ListValue
+				lv, err = value.ExpectListValue(fieldValue)
+				if err != nil {
+					return
+				}
+				fieldLen = lv.Len()
+			case *value.PrimitiveValue:
+				var sv string
+				sv, err = value.ExpectStringValue(fieldValue)
+				if err != nil {
+					return
+				}
+				fieldLen = len(sv)
+			default:
+				err = value.ErrExpectFiled
 				return
 			}
 
-			if len(sv) > sz {
+			if fieldLen > sz {
 				err = ndlvr.MakeNDLVRError("input is too short", "TOO_LONG")
 				return
 			}

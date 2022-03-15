@@ -1,6 +1,10 @@
 package builder
 
-import "regexp"
+import (
+	"regexp"
+
+	"github.com/teawithsand/ndlvr"
+)
 
 type FieldBuilder struct {
 	rules []Rule
@@ -73,12 +77,17 @@ func (b *FieldBuilder) AddMinLength(sz int) *FieldBuilder {
 	})
 }
 
-// AddBuilderRule adds rule, which requires other builder to construct it.
-// Rules like "list_of" and "list_of_objects" make use of it.
 func (b *FieldBuilder) AddListOf(fieldBuilder *FieldBuilder) *FieldBuilder {
 	return b.AddRule(Rule{
 		Name:     "list_of",
 		Argument: fieldBuilder.BuildRaw(),
+	})
+}
+
+func (b *FieldBuilder) AddListOfObjects(builder *Builder) *FieldBuilder {
+	return b.AddRule(Rule{
+		Name:     "list_of_objects",
+		Argument: (map[string]interface{})(builder.MustBuild().(ndlvr.RulesMap)),
 	})
 }
 
